@@ -1,0 +1,18 @@
+Goal: Set up Google Home Mini to record current temperature and save it to 
+      a database
+
+Client: A dashboard listing all of the temperatures recorded by Google Home Mini
+
+API: Allow us to store and query data
+
+Backend: Interact with a database to store and query temperature data
+
+Procedure: 
+1. Set up project on GCP >> 
+2. Learn how to create an action on Google Home/ Assistant
+3. Set up node express app
+4. Create views -> EJS template engine
+5. Create the api -> 2 functions: get temperature data and to post temperature data
+6. Expose flaws within the api 
+
+
