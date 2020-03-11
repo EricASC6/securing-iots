@@ -1,18 +1,19 @@
-Goal: Set up Google Home Mini to record current temperature and save it to 
-      a database
+Goal: Create a simple note taking app that uses an insecure api
+      - Exploit api with various technqiues
+      - Explore solutions to mitigate vulnerabilities
+      - Record findings
+      - Secure a crucial component of iot architecture
 
-Client: A dashboard listing all of the temperatures recorded by Google Home Mini
+Notes app
+ - Allow user to create notes --> POST Request
+    - structure: {
+        name: String,
+        note: String
+    }
 
-API: Allow us to store and query data
+ - Allow user to view notes
 
-Backend: Interact with a database to store and query temperature data
-
-Procedure: 
-1. Set up project on GCP >> 
-2. Learn how to create an action on Google Home/ Assistant
-3. Set up node express app
-4. Create views -> EJS template engine
-5. Create the api -> 2 functions: get temperature data and to post temperature data
-6. Expose flaws within the api 
-
-
+Todo:
+ - Set up node backend
+ - Create frontend using bootstrap and ejs
+  
