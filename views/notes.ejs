@@ -12,11 +12,12 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
-    <title>Home</title>
+    <script defer src="js/app.js"></script>
+    <title>Notes</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <span class="navbar-brand mb-0 h1">Eric Chen's Notes</span>
+      <span class="navbar-brand mb-0 h1"><%= user.name %>'s Notes</span>
     </nav>
     <div class="select container-fluid py-4">
       <a href="#" class="badge badge-pill badge-primary p-2 mr-1">All</a>
@@ -25,36 +26,20 @@
     </div>
     <main class="container-fluid">
       <ul class="list-group">
+        <% user.notes.all.forEach(note => { %>
         <li class="list-group-item">
           <div class="card-body">
-            <h5 class="card-title">csTask 52</h5>
-            <span class="badge badge-pill badge-primary">Science</span>
+            <h5 class="card-title"><%= note.title %></h5>
+            <span class="badge badge-pill badge-primary"><%= note.type %></span>
             <p class="card-text">
-              Here's what I have to do
+              <%= note.description %>
             </p>
           </div>
         </li>
-        <li class="list-group-item">
-          <div class="card-body">
-            <h5 class="card-title">csTask 52</h5>
-            <span class="badge badge-pill badge-primary">Science</span>
-            <p class="card-text">
-              Here's what I have to do
-            </p>
-          </div>
-        </li>
-        <li class="list-group-item">
-          <div class="card-body">
-            <h5 class="card-title">csTask 52</h5>
-            <span class="badge badge-pill badge-primary">Science</span>
-            <p class="card-text">
-              Here's what I have to do
-            </p>
-          </div>
-        </li>
+        <% }) %>
       </ul>
     </main>
-    <form class="container-fluid">
+    <form class="container-fluid" id="create-note">
       <div class="form-group">
         <label for="note-title">Title</label>
         <input
@@ -62,6 +47,7 @@
           class="form-control"
           id="note-title"
           placeholder="Title"
+          required
         />
       </div>
       <div class="form-group">
@@ -72,13 +58,15 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="exampleFormControlTextarea1">Note</label>
+        <label for="note-text">Note</label>
         <textarea
           class="form-control"
-          id="exampleFormControlTextarea1"
+          id="note-text"
           rows="3"
+          required
         ></textarea>
       </div>
+      <button class="btn btn-primary" type="submit">Create</button>
     </form>
   </body>
 </html>
