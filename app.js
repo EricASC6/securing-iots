@@ -50,7 +50,7 @@ app.get("/login", (req, res) => {
 });
 
 // Api
-app.use("data/note", notesApi);
+app.use("/data/note", notesApi);
 
 app.get("/", (req, res) => {
   res.render("home");
