@@ -6,3 +6,12 @@ Content-Type: application/json
     "subject": "Humanities",
     "description": "Hello World"
 }
+
+###
+GET http://localhost:3000/data/notes/stem/109264367476372654706
+
+### 
+GET http://localhost:3000/data/notes/humanities/109264367476372654706
+
+###
+GET http://localhost:3000/data/notes/all/109264367476372654706

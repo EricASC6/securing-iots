@@ -20,12 +20,24 @@
       <span class="navbar-brand mb-0 h1"><%= user.name %>'s Notes</span>
     </nav>
     <div class="select container-fluid py-4">
-      <a href="#" class="badge badge-pill badge-primary p-2 mr-1">All</a>
-      <a href="#" class="badge badge-pill badge-primary p-2 mr-1">STEM</a>
-      <a href="#" class="badge badge-pill badge-primary p-2 mr-1">Humanities</a>
+      <a href="#" class="badge badge-pill badge-primary p-2 mr-1" id="all-notes"
+        >All</a
+      >
+      <a
+        href="#"
+        class="badge badge-pill badge-primary p-2 mr-1"
+        id="stem-notes"
+        >STEM</a
+      >
+      <a
+        href="#"
+        class="badge badge-pill badge-primary p-2 mr-1"
+        id="humanities-notes"
+        >Humanities</a
+      >
     </div>
-    <main class="container-fluid">
-      <ul class="list-group">
+    <main class="container-fluid" id="notes-container">
+      <ul class="list-group" id="notes-list" data-note-type="all">
         <% user.notes.all.forEach(note => { %>
         <li class="list-group-item">
           <div class="card-body">

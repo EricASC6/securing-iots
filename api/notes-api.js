@@ -3,13 +3,6 @@ const router = express.Router();
 const User = require("../models/user");
 const Note = require("../models/note").model;
 
-router.use(express.json());
-
-const SUBJECTS = {
-  STEM: "stem",
-  Humanities: "humanities"
-};
-
 async function authenticateUser(req, res, next) {
   const id = req.params.id;
   const user = await User.findOne({ googleId: id });
@@ -21,7 +14,29 @@ async function authenticateUser(req, res, next) {
   }
 }
 
-router.post("/new/:id", authenticateUser, async (req, res) => {
+router.use(express.json());
+
+router.get("/notes/all/:id", authenticateUser, (req, res) => {
+  const notes = req.user.notes.all;
+  res.json({ notes: notes });
+});
+
+router.get("/notes/stem/:id", authenticateUser, (req, res) => {
+  const stemNotes = req.user.notes.stem;
+  res.json({ notes: stemNotes });
+});
+
+router.get("/notes/humanities/:id", authenticateUser, (req, res) => {
+  const humanitiesNotes = req.user.notes.humanities;
+  res.json({ notes: humanitiesNotes });
+});
+
+const SUBJECTS = {
+  STEM: "stem",
+  Humanities: "humanities"
+};
+
+router.post("/note/new/:id", authenticateUser, async (req, res) => {
   try {
     const user = req.user;
     const { title, subject, description } = req.body;
@@ -35,7 +50,7 @@ router.post("/new/:id", authenticateUser, async (req, res) => {
     user.notes[SUBJECTS[subject]].unshift(note);
     await user.save();
 
-    res.json("success");
+    res.json({ note: note });
   } catch (err) {
     console.log(err);
     res.status(500).json({ err: err });
