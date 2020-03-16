@@ -1,11 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const keys = require("./keys");
-const passport = require("passport");
-const passportSetup = require("./config/passport-setup");
+//const passport = require("passport");
+//const passportSetup = require("./config/passport-setup");
 const notesRoutes = require("./routes/notes-routes");
 const authRoutes = require("./routes/auth-routes");
-const cookieSession = require("cookie-session");
+//const cookieSession = require("cookie-session");
+const session = require("express-session");
 const notesApi = require("./api/notes-api");
 
 const app = express();
