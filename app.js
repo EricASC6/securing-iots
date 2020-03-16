@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const keys = require("./keys");
 const passport = require("passport");
 const passportSetup = require("./config/passport-setup");
-const cookieParser = require("cookie-parser");
 const notesRoutes = require("./routes/notes-routes");
 const authRoutes = require("./routes/auth-routes");
 const cookieSession = require("cookie-session");
@@ -23,9 +22,6 @@ db.on("error", err => console.log(err));
 app.listen(3000, () => console.log("Listening on port 3000"));
 
 app.set("view engine", "ejs");
-
-// set up cookie parser
-app.use(cookieParser());
 
 // set up session cookies
 app.use(

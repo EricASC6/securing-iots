@@ -4,7 +4,6 @@
   "description": "Junior Academy Challenge aimed towards protecting vulnerable IoT devices in an age of rising cyberattacks",
   "main": "app.js",
   "dependencies": {
-    "cookie-parser": "^1.4.4",
     "cookie-session": "^1.4.0",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
