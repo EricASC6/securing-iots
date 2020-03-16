@@ -24,16 +24,16 @@ app.listen(3000, () => console.log("Listening on port 3000"));
 app.set("view engine", "ejs");
 
 // set up session cookies
-app.use(
-  cookieSession({
-    maxAge: 24 * 60 * 60 * 1000,
-    keys: [keys.session.cookieKey]
-  })
-);
+// app.use(
+//   cookieSession({
+//     maxAge: 24 * 60 * 60 * 1000,
+//     keys: [keys.session.cookieKey]
+//   })
+// );
 
 // Initialize passport
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // routes
 app.use("/", express.static(__dirname + "/public"));
