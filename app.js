@@ -21,17 +21,16 @@ app.listen(3000, () => console.log("Listening on port 3000"));
 
 app.set("view engine", "ejs");
 
-// set up session cookies
-// app.use(
-//   cookieSession({
-//     maxAge: 24 * 60 * 60 * 1000,
-//     keys: [keys.session.cookieKey]
-//   })
-// );
-
-// Initialize passport
-// app.use(passport.initialize());
-// app.use(passport.session());
+// set up session
+app.use(
+  session({
+    secret: "securingiot",
+    resave: false,
+    cookie: {
+      maxAge: 36000
+    }
+  })
+);
 
 // routes
 app.use("/", express.static(__dirname + "/public"));
@@ -41,6 +40,16 @@ app.use("/auth", authRoutes);
 
 app.get("/login", (req, res) => {
   res.render("login");
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy(err => {
+    if (err) console.error(err);
+    else {
+      console.log(req.session);
+      res.redirect("/login");
+    }
+  });
 });
 
 // Api

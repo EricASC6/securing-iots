@@ -18,6 +18,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <span class="navbar-brand mb-0 h1"><%= user.name %>'s Notes</span>
+      <span><a href="/logout">Logout</a></span>
     </nav>
     <div class="select container-fluid py-4">
       <a href="#" class="badge badge-pill badge-primary p-2 mr-1" id="all-notes"
@@ -37,21 +38,7 @@
       >
     </div>
     <main class="container-fluid" id="notes-container">
-      <ul class="list-group" id="notes-list" data-note-type="all">
-        <% user.notes.all.forEach(note => { %>
-        <li class="list-group-item">
-          <div class="card-body">
-            <h5 class="card-title"><%= note.title %></h5>
-            <span class="badge badge-pill badge-primary"
-              ><%= note.subject %></span
-            >
-            <p class="card-text">
-              <%= note.description %>
-            </p>
-          </div>
-        </li>
-        <% }) %>
-      </ul>
+      <ul class="list-group" id="notes-list" data-note-type="all"></ul>
     </main>
     <form class="container-fluid" id="create-note">
       <div class="form-group">
