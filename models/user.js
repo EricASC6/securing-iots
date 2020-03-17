@@ -3,8 +3,20 @@ const Schema = mongoose.Schema;
 const noteSchema = require("./note").schema;
 
 const userSchema = new Schema({
-  name: String,
-  googleId: String,
+  name: {
+    type: String,
+    required: true
+  },
+  google: {
+    email: {
+      type: String,
+      required: true
+    },
+    id: {
+      type: String,
+      required: true
+    }
+  },
   notes: {
     all: [noteSchema],
     stem: [noteSchema],
