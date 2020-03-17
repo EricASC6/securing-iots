@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
 const { google } = require("googleapis");
 const keys = require("../keys");
 const fetch = require("node-fetch");
