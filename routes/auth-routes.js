@@ -5,13 +5,16 @@ const keys = require("../keys");
 const fetch = require("node-fetch");
 const User = require("../models/user");
 
-const oauth2Client = new google.auth.OAuth2(
-  keys.google.clientID,
-  keys.google.clientSecret,
-  "http://localhost:3000/auth/google/redirect"
-);
+const CLIENT_ID = keys.GOOGLE.CLIENT_ID;
+const CLIENT_SECRET = keys.GOOGLE.CLIENT_SECRET;
+const REDIRECT_URL = "http://localhost:3000/auth/google/redirect";
+const GOOGLE_API = "https://www.googleapis.com/oauth2/v2/userinfo";
 
-const googleApi = "https://www.googleapis.com/oauth2/v2/userinfo";
+const oauth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URL
+);
 
 router.get("/google", (req, res) => {
   const url = oauth2Client.generateAuthUrl({
@@ -35,36 +38,37 @@ const createNewUser = async (name, email, id) => {
     }
   });
 
-  return await newUser.save();
+  return newUser.save();
 };
 
 router.get("/google/redirect", async (req, res) => {
   const code = req.query.code;
   const { tokens } = await oauth2Client.getToken(code);
   const { access_token, refresh_token, id_token, token_type } = tokens;
-  const profileData = await fetch(googleApi, {
+
+  fetch(GOOGLE_API, {
+    method: "GET",
     headers: {
       Authorization: `${token_type} ${access_token}`
     }
-  });
-
-  const profile = await profileData.json();
-  const { name, email, id } = profile;
-
-  const existingUser = await User.findOne({
-    "google.id": id,
-    "google.email": email
-  });
-
-  if (existingUser) {
-    req.session.userId = existingUser._id;
-  } else {
-    const newUser = await createNewUser(name, email, id);
-    req.session.userId = newUser._id;
-  }
-
-  req.session.test = "test";
-  res.redirect("/notes");
+  })
+    .then(profileData => profileData.json())
+    .then(profile => {
+      const { name, email, id } = profile;
+      User.findOne({ "google.id": id, "google.email": email })
+        .exec()
+        .then(existingUser => {
+          if (existingUser) {
+            req.session.userId = existingUser._id;
+            res.redirect("/notes");
+          } else {
+            createNewUser(name, email, id).then(newUser => {
+              req.session.userId = newUser._id;
+              res.redirect("/notes");
+            });
+          }
+        });
+    });
 });
 
 module.exports = router;

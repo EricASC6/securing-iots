@@ -33,28 +33,26 @@ const SUBJECTS = {
 };
 
 router.post("/note/new", async (req, res) => {
-  if (req.user) {
-    try {
-      const user = req.user;
-      const { title, subject, description } = req.body;
-      const note = new Note({
-        title: title,
-        subject: subject,
-        description: description
-      });
+  console.log(req.session);
 
-      user.notes.all.unshift(note);
-      user.notes[SUBJECTS[subject]].unshift(note);
-      console.log(user);
-      console.log(user.__proto__);
+  try {
+    const user = req.user;
+    const { title, subject, description } = req.body;
+    const note = new Note({
+      title: title,
+      subject: subject,
+      description: description
+    });
 
-      await user.save();
+    user.notes.all.unshift(note);
+    user.notes[SUBJECTS[subject]].unshift(note);
 
-      res.json({ note: note });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ err: err });
-    }
+    await user.save();
+
+    res.json({ note: note });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ err: err });
   }
 });
 

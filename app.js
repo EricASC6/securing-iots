@@ -10,7 +10,7 @@ const User = require("./models/user");
 
 const app = express();
 
-mongoose.connect(keys.mongodb.dbURI, {
+mongoose.connect(keys.MONGODB.DB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -24,17 +24,15 @@ app.listen(3000, () => console.log("Listening on port 3000"));
 app.set("view engine", "ejs");
 
 // set up cookie-parser
-app.use(cookieParser("securingiot"));
+const COOKIE_SECRET = keys.SESSION.COOKIE_SECRET;
+app.use(cookieParser(COOKIE_SECRET));
 
 // set up session
 app.use(
   session({
     name: "user_id",
-    secret: "securingiot",
-    resave: false,
-    cookie: {
-      maxAge: 36000
-    }
+    secret: COOKIE_SECRET,
+    resave: false
   })
 );
 
