@@ -45,30 +45,32 @@ router.get("/google/redirect", async (req, res) => {
   const code = req.query.code;
   const { tokens } = await oauth2Client.getToken(code);
   const { access_token, refresh_token, id_token, token_type } = tokens;
-
-  fetch(GOOGLE_API, {
+  const profileData = await fetch(GOOGLE_API, {
     method: "GET",
     headers: {
       Authorization: `${token_type} ${access_token}`
     }
-  })
-    .then(profileData => profileData.json())
-    .then(profile => {
-      const { name, email, id } = profile;
-      User.findOne({ "google.id": id, "google.email": email })
-        .exec()
-        .then(existingUser => {
-          if (existingUser) {
-            req.session.userId = existingUser._id;
-            res.redirect("/notes");
-          } else {
-            createNewUser(name, email, id).then(newUser => {
-              req.session.userId = newUser._id;
-              res.redirect("/notes");
-            });
-          }
-        });
-    });
+  });
+
+  const profile = await profileData.json();
+  const { name, email, id } = profile;
+  const existingUser = await User.findOne({
+    "google.id": id,
+    "google.email": email
+  });
+
+  if (existingUser) {
+    console.log("existing user", existingUser);
+    req.session.userId = existingUser._id;
+  } else {
+    const newUser = await createNewUser(name, email, id);
+    req.session.userId = newUser._id;
+  }
+
+  req.session.refresh_token = refresh_token;
+  req.session.access_token = access_token;
+
+  res.redirect("/notes");
 });
 
 module.exports = router;

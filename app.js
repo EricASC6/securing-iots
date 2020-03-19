@@ -31,6 +31,7 @@ app.use(cookieParser(COOKIE_SECRET));
 app.use(
   session({
     name: "user_id",
+    saveUninitialized: false,
     secret: COOKIE_SECRET,
     resave: false
   })
@@ -38,7 +39,7 @@ app.use(
 
 // sends session_id if user is logined
 app.use((req, res, next) => {
-  if (req.signedCookies.user_id && !req.session.userId) {
+  if (!req.session || !req.session.userId) {
     res.clearCookie("user_id");
   }
 
@@ -46,25 +47,22 @@ app.use((req, res, next) => {
 });
 
 // put user in req.user if sessions are valid
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   console.log(req.url);
   if (!(req.signedCookies.user_id && req.session.userId)) {
-    console.log(req.session.userId);
     return next();
   }
 
   const id = req.session.userId;
-  User.findById(id)
-    .exec()
-    .then(user => {
-      console.log("user", user);
-      req.user = user;
-      next();
-    })
-    .catch(err => {
-      console.log("err", err);
-      next();
-    });
+  try {
+    const user = await User.findById(id);
+    console.log("user", user);
+    if (user) req.user = user;
+    next();
+  } catch (err) {
+    console.log(err);
+    next();
+  }
 });
 
 // routes

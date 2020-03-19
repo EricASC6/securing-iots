@@ -4,26 +4,14 @@ const Note = require("../models/note").model;
 
 router.use(express.json());
 
-router.get("/notes/all", (req, res) => {
+router.get("/notes/:type", (req, res) => {
+  const type = req.params.type;
+
   if (req.user) {
-    const notes = req.user.notes.all;
+    const notes = req.user.notes[type];
     res.json({ notes: notes });
   } else {
     res.json("something went wrong");
-  }
-});
-
-router.get("/notes/stem", (req, res) => {
-  if (req.user) {
-    const stemNotes = req.user.notes.stem;
-    res.json({ notes: stemNotes });
-  }
-});
-
-router.get("/notes/humanities", (req, res) => {
-  if (req.user) {
-    const humanitiesNotes = req.user.notes.humanities;
-    res.json({ notes: humanitiesNotes });
   }
 });
 
