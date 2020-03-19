@@ -38,7 +38,21 @@
       >
     </div>
     <main class="container-fluid" id="notes-container">
-      <ul class="list-group" id="notes-list" data-note-type="all"></ul>
+      <ul class="list-group" id="notes-list" data-note-type="all">
+        <% user.notes.all.forEach(note => { %>
+        <li class="list-group-item">
+          <div class="card-body">
+            <h5 class="card-title"><%= note.title %></h5>
+            <span class="badge badge-pill badge-primary"
+              ><%= note.subject %></span
+            >
+            <p class="card-text">
+              <%= note.description %>
+            </p>
+          </div>
+        </li>
+        <% }) %>
+      </ul>
     </main>
     <form class="container-fluid" id="create-note">
       <div class="form-group">

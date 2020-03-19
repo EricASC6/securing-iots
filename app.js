@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth-routes");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const notesApi = require("./api/notes-api");
+const User = require("./models/user");
 
 const app = express();
 
@@ -28,7 +29,7 @@ app.use(cookieParser("securingiot"));
 // set up session
 app.use(
   session({
-    name: "session_id",
+    name: "user_id",
     secret: "securingiot",
     resave: false,
     cookie: {
@@ -36,6 +37,37 @@ app.use(
     }
   })
 );
+
+// sends session_id if user is logined
+app.use((req, res, next) => {
+  if (req.signedCookies.user_id && !req.session.userId) {
+    res.clearCookie("user_id");
+  }
+
+  next();
+});
+
+// put user in req.user if sessions are valid
+app.use((req, res, next) => {
+  console.log(req.url);
+  if (!(req.signedCookies.user_id && req.session.userId)) {
+    console.log(req.session.userId);
+    return next();
+  }
+
+  const id = req.session.userId;
+  User.findById(id)
+    .exec()
+    .then(user => {
+      console.log("user", user);
+      req.user = user;
+      next();
+    })
+    .catch(err => {
+      console.log("err", err);
+      next();
+    });
+});
 
 // routes
 app.use("/", express.static(__dirname + "/public"));
@@ -52,6 +84,7 @@ app.get("/logout", (req, res) => {
     if (err) console.error(err);
     else {
       console.log(req.session);
+      res.clearCookie("user_id");
       res.redirect("/login");
     }
   });
@@ -59,7 +92,3 @@ app.get("/logout", (req, res) => {
 
 // Api
 app.use("/data", notesApi);
-
-app.get("/", (req, res) => {
-  res.render("home");
-});

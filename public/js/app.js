@@ -43,6 +43,7 @@ noteForm.addEventListener("submit", async e => {
     const currentNoteType = notesList.getAttribute("data-note-type");
 
     if (currentNoteType === "all" || currentNoteType === subject.value) {
+      console.log(data);
       const { title, subject, description } = data.note;
       const noteHtml = createNoteHtml(title, subject, description);
       notesList.innerHTML = noteHtml + notesList.innerHTML;
