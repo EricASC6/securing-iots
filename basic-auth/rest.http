@@ -1,0 +1,4 @@
+@username=Eric
+@password=123
+GET http://localhost:3000/data
+Authorization: Basic {{username}}:{{password}}
